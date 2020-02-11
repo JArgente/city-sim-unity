@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Character : MonoBehaviour {
 	
 	public float velocity;
-	public float health;
+	public float maxHealth;
 	public float attack;
 	public float armour;
 	public float attackCadence;
+	public Text displayStats;
     private float timeSinceLastAttack = 0;
+	private float health;
 
 	private bool engaged = false;
 
@@ -20,7 +23,12 @@ public abstract class Character : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+	}
+
+	public void writeStats(){
+		displayStats.GetComponent<Text>().text = "Health: " + health + "/" + maxHealth + "\n"
+			+ "Attack: " + attack + "\n"
+			+ "Defense: " + armour + "\n";
 	}
 
 	public void setTimeSinceLastAttack(float timeSinceLastAttack){
@@ -29,6 +37,14 @@ public abstract class Character : MonoBehaviour {
 
 	public float getTimeSinceLastAttack(){
 		return this.timeSinceLastAttack;
+	}
+
+	public void updateHealth(float increase){
+		this.health = Mathf.Min(this.health+increase, this.maxHealth);
+	}
+
+	public float getHealth(){
+		return this.health;
 	}
 
 	public bool isEngaged(){

@@ -1,19 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : Character {
 
 	public Player player;
 
 	void Start () {
-		
+		this.updateHealth(this.maxHealth);
 	}
 
 	// Update is called once per frame
 	void Update () {
 		float dist = Vector3.Distance (this.transform.position, player.transform.position);
-		if (dist < 1) {
+		if (dist < 1.5) {
+			base.writeStats ();
 			this.setEngaged(true);
 			player.setEngaged(true);
 			player.setOpponent(this);
@@ -31,11 +33,12 @@ public class Enemy : Character {
 	}
 
 	override public void sufferAttack(float attack){
-		this.health = this.health - (attack - this.armour);
-		if (this.health <= 0) {
+		this.updateHealth(- (attack - this.armour));
+		if (this.getHealth() <= 0) {
 			player.setEngaged (false);
 			player.setOpponent (null);
 			Destroy (this.gameObject);
+			this.displayStats.GetComponent<Text>().text="No Enemy engaged";
 		}
 	}
 }

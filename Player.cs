@@ -5,11 +5,10 @@ using UnityEngine;
 public class Player : Character {
 
 	private Enemy opponent;
-	public Canvas conversation;
 
 	// Use this for initialization
 	void Start () {
-		
+		this.updateHealth(this.maxHealth);
 	}
 
 	public void setOpponent(Enemy opponent){
@@ -18,6 +17,7 @@ public class Player : Character {
 	
 	// Update is called once per frame
 	void Update () {
+		base.writeStats ();
 		if (Input.GetKey ("left")) {
 			this.transform.position = new Vector3 (
 				this.transform.position.x-this.velocity*Time.deltaTime, 
@@ -52,22 +52,24 @@ public class Player : Character {
 	private void OnCollisionEnter(Collision other) {
 		if (other.gameObject.name == "PNJ") {
 			WalkerPNJ pnj = other.collider.GetComponent<WalkerPNJ> ();
-			this.conversation.gameObject.SetActive (true);
 			pnj.talkTo ();
+		}
+		if (other.gameObject.tag == "Item") {
+			other.collider.GetComponent<Item> ().consume (this);
+			Destroy (other.gameObject);
 		}
 	}
 
 	private void OnCollisionExit(Collision other) {
 		if (other.gameObject.name == "PNJ") {
 			WalkerPNJ pnj = other.collider.GetComponent<WalkerPNJ> ();
-			this.conversation.gameObject.SetActive (false);
 			pnj.finishTalk ();
 		}
 	}
 
 	override public void sufferAttack(float attack){
-		this.health = this.health - (attack - this.armour);
-		if (this.health <= 0) {
+		this.updateHealth( - (attack - this.armour));
+		if (this.getHealth() <= 0) {
 			this.setEngaged (false);
 			this.opponent = null;
 			Destroy (this.gameObject);

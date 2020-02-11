@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalkerPNJ : MonoBehaviour {
+public abstract class WalkerPNJ : MonoBehaviour {
 
 	public int maxDistance=10;
 	public int forward = 1;
@@ -13,26 +13,34 @@ public class WalkerPNJ : MonoBehaviour {
 	private bool talking = false;
 
 	void Start () {
-		this.increment = (int) Mathf.Sqrt (velocity.x * velocity.x + velocity.z * velocity.z);
+		
 	}
 
-	public void talkTo() {
-		this.talking = true;
+	public void setIncrement(int increment){
+		this.increment=increment;
 	}
 
-	public void finishTalk() {
-		this.talking = false;
+	abstract public void talkTo ();
+
+	abstract public void finishTalk ();
+
+	public bool isTalking(){
+		return talking;
+	}
+
+	public void setTalking(bool talking){
+		this.talking=talking;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (!this.talking) {
-			if (this.distance >= this.maxDistance) {
-				this.distance = 0;
-				this.forward = -1 * this.forward;
+		if (!talking) {
+			if (distance >= maxDistance) {
+				distance = 0;
+				forward = -1 * forward;
 			}
-			this.transform.position = this.transform.position + this.forward * this.velocity * Time.deltaTime;
-			this.distance = this.distance + this.increment* Time.deltaTime;
+			transform.position = transform.position + forward * velocity * Time.deltaTime;
+			distance = distance + increment* Time.deltaTime;
 		}
 	}
 }
