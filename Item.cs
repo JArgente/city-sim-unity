@@ -6,6 +6,8 @@ public abstract class Item : MonoBehaviour {
 
 	public abstract string getName();
 
+	public int price;
+
 	public abstract void consume (Character character);
 
 	// Use this for initialization

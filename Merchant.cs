@@ -26,7 +26,7 @@ public class Merchant : WalkerPNJ {
 			button.transform.SetParent (merchantPanel.transform);
 			button.transform.position = new Vector3(originalPos.x, originalPos.y+i, originalPos.z);
 			button.GetComponent<Button> ().onClick.AddListener (delegate{buyItem(element);});
-			button.transform.GetChild (0).GetComponent<Text> ().text = element.getName ();
+			button.transform.GetChild (0).GetComponent<Text> ().text = element.getName ()+" ("+element.price+")";
 			i = i + 40;
 		}
 		merchantPanel.gameObject.SetActive (true);
@@ -42,6 +42,10 @@ public class Merchant : WalkerPNJ {
 	
 	// Update is called once per frame
 	void buyItem (Item item) {
-		item.consume (player);
+		if (player.money >= item.price) {
+			player.money = player.money - item.price;
+			player.addItem (item);
+		}
+
 	}
 }
