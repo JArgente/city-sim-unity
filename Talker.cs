@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Talker : WalkerPNJ {
 
 	public CanvasRenderer conversation;
+	public string whatToSay;
 
 	// Use this for initialization
 	void Start () {
@@ -13,6 +15,7 @@ public class Talker : WalkerPNJ {
 
 	override public void talkTo() {
 		this.conversation.gameObject.SetActive (true);
+		this.conversation.gameObject.transform.GetChild (0).GetComponent<Text> ().text = whatToSay;
 		this.setTalking (true);
 	}
 

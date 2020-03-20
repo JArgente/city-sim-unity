@@ -23,7 +23,7 @@ public class Merchant : WalkerPNJ {
 		int size = stock.ToArray ().Length;
 		foreach(Item element in stock){
 			GameObject button = (GameObject)Instantiate (buttonPrefab);
-			button.transform.SetParent (merchantPanel.transform);
+			button.transform.SetParent (merchantPanel.transform.GetChild(1).transform);
 			button.transform.position = new Vector3(originalPos.x, originalPos.y+i, originalPos.z);
 			button.GetComponent<Button> ().onClick.AddListener (delegate{buyItem(element);});
 			button.transform.GetChild (0).GetComponent<Text> ().text = element.getName ()+" ("+element.price+")";
@@ -35,7 +35,7 @@ public class Merchant : WalkerPNJ {
 	override public void finishTalk() {
 		this.setTalking (false);
 		merchantPanel.gameObject.SetActive (false);
-		foreach (Transform child in merchantPanel.transform) {
+		foreach (Transform child in merchantPanel.transform.GetChild(1).transform) {
 			Destroy (child.gameObject);
 		}
 	}
